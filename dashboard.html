@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – Skillset</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f4f5f7; color: #1a1a2e; height: 100vh; overflow: hidden; display: flex;
+    }
+    .sidebar {
+      width: 220px; min-width: 220px; background: #1a1a2e;
+      display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+      transition: transform .28s cubic-bezier(.4,0,.2,1); z-index: 30;
+    }
+    .sidebar-logo { display: flex; align-items: center; gap: 10px; padding: 20px 18px; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .logo-icon { width: 28px; height: 28px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .logo-text { font-size: 14px; font-weight: 600; color: #fff; letter-spacing: .03em; }
+    .sidebar-nav { flex: 1; padding: 12px 10px; overflow-y: auto; list-style: none; }
+    .sidebar-nav::-webkit-scrollbar { display: none; }
+    .nav-item { margin-bottom: 2px; }
+    .nav-link { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 10px; font-size: 13px; color: rgba(255,255,255,.55); cursor: pointer; border: none; background: none; width: 100%; text-align: left; transition: background .15s, color .15s; }
+    .nav-link:hover { background: rgba(255,255,255,.08); color: #fff; }
+    .nav-link.active { background: rgba(255,255,255,.14); color: #fff; font-weight: 500; }
+    .nav-link-left { display: flex; align-items: center; gap: 10px; }
+    .nav-chevron { font-size: 11px; opacity: .5; transition: transform .2s; }
+    .nav-chevron.open { transform: rotate(180deg); }
+    .nav-children { list-style: none; margin: 2px 0 4px 32px; display: none; }
+    .nav-children.open { display: block; }
+    .nav-child-link { display: block; padding: 7px 10px; font-size: 12px; color: rgba(255,255,255,.4); cursor: pointer; border-radius: 6px; transition: color .15s, background .15s; }
+    .nav-child-link:hover { color: rgba(255,255,255,.8); background: rgba(255,255,255,.05); }
+    .upgrade-card { margin: 0 10px 12px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); border-radius: 14px; padding: 14px; }
+    .upgrade-card h4 { font-size: 12px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .upgrade-card p { font-size: 11px; color: rgba(255,255,255,.45); line-height: 1.5; margin-bottom: 12px; }
+    .upgrade-btn { width: 100%; padding: 8px; background: #fff; color: #1a1a2e; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: opacity .15s; }
+    .upgrade-btn:hover { opacity: .88; }
+    .sidebar-bottom { padding: 10px 10px 14px; border-top: 1px solid rgba(255,255,255,.08); list-style: none; }
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+    .topbar { background: #f4f5f7; padding: 14px 22px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #e8e9ef; flex-shrink: 0; }
+    .topbar h1 { font-size: 18px; font-weight: 600; color: #1a1a2e; flex: 1; }
+    .search-box { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #e8e9ef; border-radius: 12px; padding: 8px 12px; width: 220px; }
+    .search-box input { border: none; outline: none; font-size: 13px; color: #1a1a2e; background: transparent; width: 100%; }
+    .search-box input::placeholder { color: #9ca3af; }
+    .icon-btn { position: relative; background: #fff; border: 1px solid #e8e9ef; border-radius: 10px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background .15s; font-size: 15px; }
+    .icon-btn:hover { background: #f0f1f5; }
+    .notif-dot { position: absolute; top: 7px; right: 7px; width: 6px; height: 6px; background: #ef4444; border-radius: 50%; }
+    .avatar { width: 34px; height: 34px; background: #1a1a2e; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; font-weight: 700; }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; font-size: 20px; color: #374151; padding: 4px 6px; border-radius: 8px; }
+    .hamburger:hover { background: #e8e9ef; }
+    .page-body { flex: 1; overflow-y: auto; padding: 20px 22px; }
+    .page-body::-webkit-scrollbar { width: 5px; }
+    .page-body::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 99px; }
+    .filter-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+    .period-tabs { display: flex; gap: 3px; background: #fff; border: 1px solid #e8e9ef; border-radius: 12px; padding: 4px; }
+    .period-tab { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; background: none; color: #6b7280; transition: background .15s, color .15s; }
+    .period-tab:hover { color: #1a1a2e; }
+    .period-tab.active { background: #1a1a2e; color: #fff; }
+    .date-range { display: flex; align-items: center; gap: 7px; background: #fff; border: 1px solid #e8e9ef; border-radius: 12px; padding: 8px 14px; font-size: 12px; color: #374151; margin-left: auto; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 16px; }
+    .stat-card { background: #fff; border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .stat-card.dark { background: #1a1a2e; }
+    .stat-title { font-size: 12px; font-weight: 500; color: #6b7280; }
+    .stat-card.dark .stat-title { color: rgba(255,255,255,.55); }
+    .stat-value { font-size: 26px; font-weight: 600; color: #1a1a2e; letter-spacing: -.02em; line-height: 1; }
+    .stat-card.dark .stat-value { color: #fff; }
+    .stat-change { display: flex; align-items: center; gap: 5px; font-size: 11px; }
+    .arrow-up { color: #10b981; } .arrow-down { color: #ef4444; }
+    .pct-up { color: #10b981; font-weight: 500; } .pct-down { color: #ef4444; font-weight: 500; }
+    .change-label { color: #9ca3af; }
+    .stat-card.dark .change-label { color: rgba(255,255,255,.35); }
+    .middle-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .chart-card { background: #fff; border-radius: 18px; padding: 20px; }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .card-title { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+    .card-action { background: none; border: none; cursor: pointer; padding: 5px; border-radius: 7px; color: #9ca3af; transition: background .15s; }
+    .card-action:hover { background: #f4f5f7; }
+    .bar-chart-wrap { display: flex; flex-direction: column; height: 180px; }
+    .chart-area { flex: 1; display: flex; align-items: flex-end; border-bottom: 1px solid #f0f1f5; position: relative; }
+    .y-axis { position: absolute; left: 0; top: 0; bottom: 0; width: 40px; display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 2px; }
+    .y-label { font-size: 10px; color: #9ca3af; text-align: right; padding-right: 6px; transform: translateY(-50%); }
+    .bars-row { display: flex; align-items: flex-end; gap: 10px; flex: 1; padding: 0 6px 0 44px; height: 100%; }
+    .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+    .bar { width: 100%; max-width: 36px; background: #1a1a2e; border-radius: 6px 6px 0 0; cursor: pointer; transition: opacity .15s; }
+    .bar:hover { opacity: .7; }
+    .x-axis { display: flex; gap: 10px; padding: 8px 6px 0 44px; }
+    .x-label { flex: 1; text-align: center; font-size: 11px; color: #9ca3af; }
+    .right-col { display: flex; flex-direction: column; gap: 12px; }
+    .calendar-card { background: #fff; border-radius: 18px; padding: 18px; }
+    .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .cal-title { font-size: 13px; font-weight: 600; color: #1a1a2e; }
+    .cal-nav { background: none; border: none; cursor: pointer; color: #6b7280; font-size: 16px; padding: 3px 7px; border-radius: 6px; transition: background .15s; }
+    .cal-nav:hover { background: #f4f5f7; }
+    .cal-days-header { display: grid; grid-template-columns: repeat(7,1fr); margin-bottom: 6px; }
+    .cal-day-name { text-align: center; font-size: 10px; font-weight: 500; color: #9ca3af; padding: 3px 0; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; }
+    .cal-cell { display: flex; align-items: center; justify-content: center; }
+    .cal-day { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #374151; cursor: pointer; border: none; background: none; transition: background .12s; }
+    .cal-day:hover { background: #f4f5f7; }
+    .cal-day.today { background: #1a1a2e; color: #fff; font-weight: 600; }
+    .growth-card { background: #fff; border-radius: 18px; padding: 18px; }
+    .growth-inner { display: flex; align-items: center; gap: 16px; margin-top: 12px; }
+    .donut-wrap { position: relative; width: 88px; height: 88px; flex-shrink: 0; }
+    .donut-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #1a1a2e; }
+    .growth-info { display: flex; flex-direction: column; gap: 4px; }
+    .growth-pct { font-size: 12px; color: #10b981; font-weight: 500; }
+    .growth-sub { font-size: 11px; color: #9ca3af; }
+    .table-card { background: #fff; border-radius: 18px; overflow: hidden; }
+    .table-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #f0f1f5; }
+    .table-actions { display: flex; gap: 6px; }
+    .tbl-btn { background: none; border: none; cursor: pointer; color: #6b7280; padding: 6px; border-radius: 8px; font-size: 14px; transition: background .15s; }
+    .tbl-btn:hover { background: #f4f5f7; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th { padding: 10px 20px; text-align: left; font-size: 11px; font-weight: 500; color: #9ca3af; border-bottom: 1px solid #f0f1f5; white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid #f0f1f5; transition: background .12s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fafafa; }
+    tbody td { padding: 12px 20px; font-size: 13px; color: #374151; white-space: nowrap; }
+    .course-cell { display: flex; align-items: center; gap: 12px; }
+    .course-thumb { width: 36px; height: 36px; border-radius: 9px; object-fit: cover; background: #f4f5f7; flex-shrink: 0; }
+    .course-name { font-size: 13px; font-weight: 500; color: #1a1a2e; }
+    .student-id { font-family: monospace; font-size: 12px; color: #6b7280; }
+    .amount { font-weight: 600; color: #1a1a2e; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 500; }
+    .badge-paid { background: #ecfdf5; color: #065f46; }
+    .badge-pending { background: #fffbeb; color: #92400e; }
+    .badge-refunded { background: #fef2f2; color: #991b1b; }
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 20; }
+    .overlay.open { display: block; }
+    @media (max-width: 1024px) {
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .middle-grid { grid-template-columns: 1fr; }
+      .search-box { display: none; }
+    }
+    @media (max-width: 768px) {
+      .sidebar { position: fixed; top: 0; left: 0; height: 100%; transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .hamburger { display: flex; }
+      .topbar { padding: 12px 16px; }
+      .page-body { padding: 14px 16px; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .date-range { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a1a2e" stroke-width="2.5">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+      </div>
+      <span class="logo-text">Skillset</span>
+    </div>
+    <ul class="sidebar-nav">
+      <li class="nav-item">
+        <button class="nav-link active" onclick="setActive(this)">
+          <span class="nav-link-left">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" onclick="setActive(this)">
+          <span class="nav-link-left">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Mentors
+          </span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" onclick="setActive(this)">
+          <span class="nav-link-left">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            Students
+          </span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" onclick="toggleAnalytics(this)">
+          <span class="nav-link-left">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Analytics
+          </span>
+          <span class="nav-chevron" id="analytics-chevron">▾</span>
+        </button>
+        <ul class="nav-children" id="analytics-children">
+          <li><span class="nav-child-link">Overview</span></li>
+          <li><span class="nav-child-link">Reports</span></li>
+          <li><span class="nav-child-link">Insights</span></li>
+        </ul>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" onclick="setActive(this)">
+          <span class="nav-link-left">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            Courses
+          </span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" onclick="setActive(this)">
+          <span class="nav-link-left">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Forum
+          </span>
+        </button>
+      </li>
+    </ul>
+    <div class="upgrade-card">
+      <h4>Upgrade To Pro</h4>
+      <p>Get access to additional features and content.</p>
+      <button class="upgrade-btn">Upgrade</button>
+    </div>
+    <ul class="sidebar-bottom">
+      <li class="nav-item">
+        <button class="nav-link" onclick="setActive(this)">
+          <span class="nav-link-left">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" onclick="setActive(this)">
+          <span class="nav-link-left">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Help Center
+          </span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link">
+          <span class="nav-link-left">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Log out
+          </span>
+        </button>
+      </li>
+    </ul>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="hamburger" onclick="openSidebar()">☰</button>
+      <h1>Dashboard</h1>
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" placeholder="Search..." />
+      </div>
+      <button class="icon-btn">🔔<span class="notif-dot"></span></button>
+      <div class="avatar">SK</div>
+    </header>
+
+    <div class="page-body">
+      <div class="filter-row">
+        <div class="period-tabs">
+          <button class="period-tab" onclick="setPeriod(this)">Day</button>
+          <button class="period-tab" onclick="setPeriod(this)">Week</button>
+          <button class="period-tab active" onclick="setPeriod(this)">Month</button>
+          <button class="period-tab" onclick="setPeriod(this)">Year</button>
+        </div>
+        <div class="date-range">📅 1 Sep 2024 – 31 Sep 2024</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card dark">
+          <div class="stat-title">Total Revenue</div>
+          <div class="stat-value">$23,902</div>
+          <div class="stat-change"><span class="arrow-up">↗</span><span class="pct-up">+4.2%</span><span class="change-label">from last month</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Active Users</div>
+          <div class="stat-value">16,815</div>
+          <div class="stat-change"><span class="arrow-up">↗</span><span class="pct-up">+1.7%</span><span class="change-label">from last month</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">New Users</div>
+          <div class="stat-value">1,457</div>
+          <div class="stat-change"><span class="arrow-down">↘</span><span class="pct-down">-2.9%</span><span class="change-label">from last month</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Total Mentors</div>
+          <div class="stat-value">2,023</div>
+          <div class="stat-change"><span class="arrow-up">↗</span><span class="pct-up">+0.9%</span><span class="change-label">from last month</span></div>
+        </div>
+      </div>
+
+      <div class="middle-grid">
+        <div class="chart-card">
+          <div class="card-header"><span class="card-title">Total Revenue</span><button class="card-action">⤢</button></div>
+          <div class="bar-chart-wrap">
+            <div class="chart-area">
+              <div class="y-axis">
+                <span class="y-label">10K</span><span class="y-label">8K</span>
+                <span class="y-label">6K</span><span class="y-label">4K</span>
+                <span class="y-label">2K</span><span class="y-label">0</span>
+              </div>
+              <div class="bars-row">
+                <div class="bar-col"><div class="bar" style="height:32%" title="$3,200"></div></div>
+                <div class="bar-col"><div class="bar" style="height:58%" title="$5,800"></div></div>
+                <div class="bar-col"><div class="bar" style="height:94%" title="$9,400"></div></div>
+                <div class="bar-col"><div class="bar" style="height:72%" title="$7,200"></div></div>
+                <div class="bar-col"><div class="bar" style="height:81%" title="$8,100"></div></div>
+                <div class="bar-col"><div class="bar" style="height:46%" title="$4,600"></div></div>
+              </div>
+            </div>
+            <div class="x-axis">
+              <span class="x-label">Jan</span><span class="x-label">Feb</span><span class="x-label">Mar</span>
+              <span class="x-label">Apr</span><span class="x-label">May</span><span class="x-label">Jun</span>
+            </div>
+          </div>
+        </div>
+        <div class="right-col">
+          <div class="calendar-card">
+            <div class="cal-header">
+              <button class="cal-nav" onclick="changeMonth(-1)">&#8249;</button>
+              <span class="cal-title" id="cal-title">September 2024</span>
+              <button class="cal-nav" onclick="changeMonth(1)">&#8250;</button>
+            </div>
+            <div class="cal-days-header">
+              <div class="cal-day-name">Su</div><div class="cal-day-name">Mo</div>
+              <div class="cal-day-name">Tu</div><div class="cal-day-name">We</div>
+              <div class="cal-day-name">Th</div><div class="cal-day-name">Fr</div>
+              <div class="cal-day-name">Sa</div>
+            </div>
+            <div class="cal-grid" id="cal-grid"></div>
+          </div>
+          <div class="growth-card">
+            <div class="card-title">Community growth</div>
+            <div class="growth-inner">
+              <div class="donut-wrap">
+                <svg width="88" height="88" viewBox="0 0 88 88">
+                  <circle cx="44" cy="44" r="36" fill="none" stroke="#f0f1f5" stroke-width="10"/>
+                  <circle cx="44" cy="44" r="36" fill="none" stroke="#1a1a2e" stroke-width="10"
+                    stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="79.2"
+                    transform="rotate(-90 44 44)"/>
+                </svg>
+                <div class="donut-label">65%</div>
+              </div>
+              <div class="growth-info">
+                <div class="growth-pct">↗ +9.9%</div>
+                <div class="growth-sub">from last month</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <span class="card-title">Course Purchases</span>
+          <div class="table-actions"><button class="tbl-btn">↻</button><button class="tbl-btn">⚙</button></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Course Name</th><th>Student Name</th><th>Student ID</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div class="course-cell"><img class="course-thumb" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=48&h=48&fit=crop&auto=format" alt=""/><span class="course-name">Digital Marketing</span></div></td>
+                <td>Aria</td><td><span class="student-id">#3456791</span></td>
+                <td><span class="amount">$372.00</span></td><td><span class="badge badge-paid">Paid</span></td>
+              </tr>
+              <tr>
+                <td><div class="course-cell"><img class="course-thumb" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=48&h=48&fit=crop&auto=format" alt=""/><span class="course-name">UX/UI Design Fundamentals</span></div></td>
+                <td>Marcus</td><td><span class="student-id">#3456792</span></td>
+                <td><span class="amount">$249.00</span></td><td><span class="badge badge-paid">Paid</span></td>
+              </tr>
+              <tr>
+                <td><div class="course-cell"><img class="course-thumb" src="https://images.unsplash.com/photo-1526379879527-8559ecfcaec0?w=48&h=48&fit=crop&auto=format" alt=""/><span class="course-name">Python for Data Science</span></div></td>
+                <td>Sofia</td><td><span class="student-id">#3456793</span></td>
+                <td><span class="amount">$189.00</span></td><td><span class="badge badge-pending">Pending</span></td>
+              </tr>
+              <tr>
+                <td><div class="course-cell"><img class="course-thumb" src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=48&h=48&fit=crop&auto=format" alt=""/><span class="course-name">Advanced Photography</span></div></td>
+                <td>Jordan</td><td><span class="student-id">#3456794</span></td>
+                <td><span class="amount">$310.00</span></td><td><span class="badge badge-paid">Paid</span></td>
+              </tr>
+              <tr>
+                <td><div class="course-cell"><img class="course-thumb" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=48&h=48&fit=crop&auto=format" alt=""/><span class="course-name">Business Analytics</span></div></td>
+                <td>Priya</td><td><span class="student-id">#3456795</span></td>
+                <td><span class="amount">$420.00</span></td><td><span class="badge badge-refunded">Refunded</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
+    function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
+    function setActive(btn) { document.querySelectorAll('.nav-link').forEach(function(l){ l.classList.remove('active'); }); btn.classList.add('active'); }
+    function toggleAnalytics(btn) { setActive(btn); document.getElementById('analytics-children').classList.toggle('open'); document.getElementById('analytics-chevron').classList.toggle('open'); }
+    function setPeriod(btn) { document.querySelectorAll('.period-tab').forEach(function(t){ t.classList.remove('active'); }); btn.classList.add('active'); }
+
+    var calYear = 2024, calMonth = 8;
+    var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    function renderCalendar() {
+      document.getElementById('cal-title').textContent = MONTHS[calMonth] + ' ' + calYear;
+      var firstDay = new Date(calYear, calMonth, 1).getDay();
+      var daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+      var today = (calYear === 2024 && calMonth === 8) ? 19 : -1;
+      var html = '';
+      for (var i = 0; i < firstDay; i++) html += '<div class="cal-cell"></div>';
+      for (var d = 1; d <= daysInMonth; d++) {
+        html += '<div class="cal-cell"><button class="cal-day' + (d === today ? ' today' : '') + '">' + d + '</button></div>';
+      }
+      document.getElementById('cal-grid').innerHTML = html;
+    }
+    function changeMonth(dir) {
+      calMonth += dir;
+      if (calMonth < 0) { calMonth = 11; calYear--; }
+      if (calMonth > 11) { calMonth = 0; calYear++; }
+      renderCalendar();
+    }
+    renderCalendar();
+  </script>
+</body>
+</html>

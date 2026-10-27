@@ -1,0 +1,107 @@
+/* ESTILOS DE LA ESTANTERÍA VIRTUAL */
+
+.bookcase-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #8c5a35; /* Color madera oscura del fondo */
+    border: 8px solid #5c3a21; /* Marcos laterales de madera */
+    border-radius: 4px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 10px 20px rgba(0,0,0,0.3);
+    padding: 10px 5px 0 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.shelf-level {
+    display: flex;
+    height: 80px; /* Altura de cada tramo */
+    position: relative;
+}
+
+/* El divisor invisible en el medio para separar izquierda y derecha */
+.shelf-divider {
+    width: 2px;
+    background-color: rgba(0,0,0,0.1);
+    height: 100%;
+    margin: 0 5px;
+}
+
+.shelf-slot {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 4px;
+}
+
+/* Simulador de torre de pantalones apilados */
+.jeans-stack {
+    width: 80%;
+    height: 60%;
+    background: linear-gradient(0deg, #1c3d5a 10%, #295b85 15%, #1c3d5a 30%, #295b85 35%, #1c3d5a 50%, #295b85 55%, #1c3d5a 70%, #295b85 75%, #1c3d5a 90%);
+    border-radius: 3px;
+    box-shadow: 2px -2px 5px rgba(0,0,0,0.4);
+    opacity: 0.6; /* Un poco opacos por defecto */
+    transition: all 0.4s ease;
+}
+
+/* La tabla de madera que separa cada nivel */
+.wood-board {
+    height: 12px;
+    background-color: #6b4226;
+    border-top: 2px solid #8e5c38;
+    border-bottom: 3px solid #3d2413;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    margin: 0 -5px;
+    z-index: 2;
+}
+
+.bottom-board {
+    height: 20px;
+}
+
+/* =========================================
+   ANIMACIÓN CUANDO ES LA UBICACIÓN EXACTA
+========================================= */
+
+@keyframes pulseHighlight {
+    0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.8); background-color: rgba(220, 53, 69, 0.3); }
+    70% { box-shadow: 0 0 15px 10px rgba(220, 53, 69, 0); background-color: rgba(220, 53, 69, 0.1); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); background-color: transparent; }
+}
+
+/* Clase que se aplica mediante JS a la ubicación específica */
+.slot-highlight {
+    animation: pulseHighlight 1.5s infinite;
+    border: 2px dashed #dc3545;
+    z-index: 5;
+}
+
+/* Resalta los pantalones de esa ubicación */
+.slot-highlight .jeans-stack {
+    opacity: 1;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}
+
+.blink-text {
+    color: #ffc107;
+    animation: blinker 1.5s linear infinite;
+}
+@keyframes blinker {
+    50% { opacity: 0.5; }
+}
+
+/* Utilidad para ocultar vistas (SPA) */
+.vista-modulo {
+    animation: fadeIn 0.4s ease;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,242 @@
+/* RESET & FONTS */
+body { background-color: #f8f9fa; color: #1a1a1a; font-family: 'Plus Jakarta Sans', sans-serif; padding-bottom: 70px; }
+a { text-decoration: none; }
+
+/* NAVBAR & SCROLL CATEGORIAS */
+.navbar-brand img { max-height: 40px; }
+.search-container { position: relative; }
+.search-container input { border-radius: 20px; background-color: #f1f3f5; border: none; padding: 10px 20px 10px 40px; font-size: 0.9rem; }
+.search-container i { position: absolute; top: 50%; left: 15px; transform: translateY(-50%); color: #6c757d; }
+
+/* FIX CORTE CATEGORIAS */
+.category-scroll {
+    display: flex; overflow-x: auto; gap: 10px;
+    padding: 5px 15px 20px 15px; /* Espacio extra abajo para que no se corte */
+    margin: 0 -15px; /* Alineación perfecta con el contenedor */
+    scrollbar-width: none; -ms-overflow-style: none;
+}
+.category-scroll::-webkit-scrollbar { display: none; }
+
+.category-chip {
+    flex-shrink: 0; background: #fff; border: 1px solid #e0e0e0; border-radius: 20px;
+    padding: 6px 16px; color: #444; font-weight: 700; font-size: 0.85rem;
+    white-space: nowrap; transition: all 0.2s;
+}
+.category-chip:hover, .category-chip.active { background: #e3001b; color: #fff !important; border-color: #e3001b; }
+
+/* MENU GRID */
+.menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+@media (min-width: 768px) { .menu-grid { grid-template-columns: repeat(3, 1fr); gap: 15px; } }
+@media (min-width: 992px) { .menu-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
+
+.product-card { background: #fff; border: 1px solid #eaeaea; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; height: 100%; box-shadow: 0px 2px 5px rgba(0,0,0,0.03); }
+.product-card .item-name { font-size: 0.9rem; font-weight: 800; line-height: 1.2; color: #111; margin-bottom: 4px; }
+/* AQUÍ SE CORRIGIÓ EL TEXTO CORTADO QUITANDO EL CLAMP Y EL OVERFLOW HIDDEN */
+.product-card .item-desc { font-size: 0.75rem; color: #777; margin-bottom: 8px; }
+.product-card .item-price { font-weight: 800; font-size: 1.05rem; color: #111; }
+.product-card .stock-text { font-size: 0.7rem; color: #198754; font-weight: 700; margin-bottom: 8px; }
+
+/* BOTONES ROOF */
+.btn-danger { background-color: #e3001b !important; border-color: #e3001b !important; color: #fff !important; }
+.btn-danger:hover { background-color: #c00015 !important; border-color: #c00015 !important; }
+.btn-outline-danger { color: #e3001b !important; border-color: #e3001b !important; background-color: transparent !important; }
+.btn-add { background: #e3001b; color: #fff; border: none; font-weight: 700; font-size: 0.85rem; padding: 8px 0; border-radius: 20px; width: 100%; transition: 0.2s; }
+.btn-add:hover { background: #b30015; color: #fff; }
+.disabled-btn { background: #eee !important; color: #999 !important; border: none !important; pointer-events: none; }
+
+/* BOTTOM NAV */
+.bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; border-top: 1px solid #eaeaea; display: flex; justify-content: space-around; padding: 8px 0; z-index: 1040; }
+.bottom-nav-item { display: flex; flex-direction: column; align-items: center; color: #6c757d; font-size: 0.75rem; font-weight: 700; position: relative; }
+.bottom-nav-item.active { color: #e3001b; }
+.bottom-nav-item i { font-size: 1.3rem; margin-bottom: 2px; }
+.cart-badge { position: absolute; top: -2px; right: -8px; background: #e3001b; color: #fff; font-size: 0.6rem; padding: 2px 5px; border-radius: 10px; }
+
+/* FLOATING CART (DESKTOP) */
+.floating-cart { position: fixed; top: 90px; right: 20px; background-color: #e3001b; color: #fff; padding: 10px 18px; border-radius: 50px; z-index: 1050; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); font-weight: 700; border: 2px solid #fff; transition: transform 0.2s; }
+.floating-cart:hover { transform: scale(1.05); color: #fff; }
+
+/* MODALS BOTTOM SHEET */
+.modal-content { border-radius: 16px; border: none; }
+@media (max-width: 768px) { .modal-dialog-bottom { display: flex; align-items: flex-end; min-height: 100%; margin: 0; } .modal-dialog-bottom .modal-content { border-radius: 20px 20px 0 0; max-height: 90vh; } }
+.modal-backdrop { z-index: 1040 !important; } .modal { z-index: 1050 !important; }
+
+/* CUSTOM CHECKBOXES IN MODAL */
+.custom-check-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
+.custom-check-row:last-child { border-bottom: none; }
+.custom-check-input { width: 18px; height: 18px; accent-color: #e3001b; cursor: pointer; }
+.custom-check-label { flex-grow: 1; margin-left: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
+.custom-check-price { font-weight: 700; color: #777; font-size: 0.85rem; }
+
+/* CHECKOUT RADIOS */
+.checkout-radio-card { border: 1px solid #eaeaea; border-radius: 12px; padding: 12px; margin-bottom: 10px; cursor: pointer; background: #fff; transition: 0.2s; display: flex; flex-direction: column; }
+.checkout-radio-card.selected { border-color: #e3001b; background: #fffafb; }
+.checkout-radio-header { display: flex; align-items: center; }
+.checkout-radio-header input[type="radio"] { width: 18px; height: 18px; margin-right: 10px; accent-color: #e3001b; }
+.checkout-radio-title { font-weight: 700; font-size: 0.9rem; color: #333; }
+.payment-details { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #ddd; }
+.checkout-radio-card.selected .payment-details { display: block; }
+.upload-btn { border: 2px dashed #ccc; background: #fafafa; text-align: center; padding: 12px; border-radius: 8px; cursor: pointer; display: block; transition: 0.2s; color: #555; font-size: 0.85rem; font-weight: 600; }
+.upload-btn:hover { border-color: #e3001b; color: #e3001b; }
+
+.text-danger { color: #e3001b !important; } .border-danger { border-color: #e3001b !important; } .bg-danger { background-color: #e3001b !important; }
+
+/* =======================================================
+   REEMPLAZO DE COLORES UNIFUERTE (NARANJA Y AZUL)
+   ======================================================= */
+/* Color de las pestañas de categorías */
+.category-chip:hover, .category-chip.active { background: #FF7518 !important; color: #fff !important; border-color: #FF7518 !important; }
+
+/* Botones Principales (Naranja) */
+.btn-danger { background-color: #FF7518 !important; border-color: #FF7518 !important; color: #fff !important; }
+.btn-danger:hover { background-color: #E66310 !important; border-color: #E66310 !important; }
+
+/* Botones con borde (Azules) */
+.btn-outline-danger { color: #0B4C8C !important; border-color: #0B4C8C !important; background-color: transparent !important; }
+.btn-outline-danger:hover { background-color: #0B4C8C !important; color: #fff !important; }
+
+/* Botón Añadir a Tarjeta (Azul que pasa a Naranja) */
+.btn-add { background: #0B4C8C !important; color: #fff !important; border: none; font-weight: 700; font-size: 0.85rem; padding: 8px 0; border-radius: 20px; width: 100%; transition: 0.2s; }
+.btn-add:hover { background: #FF7518 !important; color: #fff !important; }
+
+/* Íconos inferiores y carritos flotantes */
+.bottom-nav-item.active { color: #FF7518 !important; }
+.cart-badge { background: #0B4C8C !important; }
+.floating-cart { background-color: #FF7518 !important; border-color: #fff !important; }
+.floating-cart:hover { background-color: #0B4C8C !important; }
+
+/* Checkboxes y textos del modal (Telas y Adicionales) */
+.custom-check-input { accent-color: #FF7518 !important; }
+.text-danger { color: #FF7518 !important; }
+.border-danger { border-color: #FF7518 !important; }
+.bg-danger { background-color: #FF7518 !important; }
+
+/* Carrito Oscuro al Azul de Unifuerte */
+.bg-dark { background-color: #0B4C8C !important; }
+.border-secondary { border-color: rgba(255,255,255,0.2) !important; }
+
+/* Etiquetas Obligatorias o Descuentos */
+.badge.bg-danger { background-color: #FF7518 !important; }
+.badge.bg-warning { background-color: #0B4C8C !important; color: #fff !important; }
+.border-warning { border-color: #0B4C8C !important; }
+.text-warning { color: #0B4C8C !important; }
+
+/* =======================================================
+   REEMPLAZO DE COLORES UNIFUERTE (NARANJA Y AZUL)
+   ======================================================= */
+/* Color de las pestañas de categorías */
+.category-chip:hover, .category-chip.active { background: #FF7518 !important; color: #fff !important; border-color: #FF7518 !important; }
+
+/* Botones Principales (Naranja) */
+.btn-danger { background-color: #FF7518 !important; border-color: #FF7518 !important; color: #fff !important; }
+.btn-danger:hover { background-color: #E66310 !important; border-color: #E66310 !important; }
+
+/* Botones con borde (Azules) */
+.btn-outline-danger { color: #0B4C8C !important; border-color: #0B4C8C !important; background-color: transparent !important; }
+.btn-outline-danger:hover { background-color: #0B4C8C !important; color: #fff !important; }
+
+/* Botón Añadir a Tarjeta (Azul que pasa a Naranja) */
+.btn-add { background: #0B4C8C !important; color: #fff !important; border: none; font-weight: 700; font-size: 0.85rem; padding: 8px 0; border-radius: 20px; width: 100%; transition: 0.2s; }
+.btn-add:hover { background: #FF7518 !important; color: #fff !important; }
+
+/* Íconos inferiores y carritos flotantes */
+.bottom-nav-item.active { color: #FF7518 !important; }
+.cart-badge { background: #0B4C8C !important; }
+.floating-cart { background-color: #FF7518 !important; border-color: #fff !important; }
+.floating-cart:hover { background-color: #0B4C8C !important; }
+
+/* Checkboxes y textos del modal (Telas y Adicionales) */
+.custom-check-input { accent-color: #FF7518 !important; }
+.text-danger { color: #FF7518 !important; }
+.border-danger { border-color: #FF7518 !important; }
+.bg-danger { background-color: #FF7518 !important; }
+
+/* Carrito Oscuro al Azul de Unifuerte */
+.bg-dark { background-color: #0B4C8C !important; }
+.border-secondary { border-color: rgba(255,255,255,0.2) !important; }
+
+/* Etiquetas Obligatorias o Descuentos */
+.badge.bg-danger { background-color: #FF7518 !important; }
+.badge.bg-warning { background-color: #0B4C8C !important; color: #fff !important; }
+.border-warning { border-color: #0B4C8C !important; }
+.text-warning { color: #0B4C8C !important; }
+
+/* --- ESTILOS COQUETOS Y PEQUEÑOS PARA FORMULARIOS Y MODALES --- */
+
+/* Formulario Principal */
+.formulario-coqueto .form-control {
+    border-radius: 10px !important;
+    background-color: #f8f9fa !important;
+    border: 1px solid #e9ecef !important;
+    font-size: 0.85rem;
+    padding: 10px 14px;
+    color: #495057;
+    transition: all 0.2s ease-in-out;
+}
+.formulario-coqueto .form-control:focus {
+    background-color: #ffffff !important;
+    border-color: #0B4C8C !important;
+    box-shadow: 0 0 0 3px rgba(11, 76, 140, 0.1) !important;
+}
+
+/* Modales (Ventanas Emergentes) */
+.modal-content {
+    border: none;
+}
+.text-primary {
+    color: #0B4C8C !important;
+}
+.btn-primary {
+    background-color: #0B4C8C !important;
+    border-color: #0B4C8C !important;
+}
+.btn-primary:hover {
+    background-color: #083766 !important;
+}
+
+/* Tarjetas de Producto Ajustadas */
+.product-card {
+    border: 1px solid #f0f0f0;
+    border-radius: 14px;
+    padding: 12px;
+    background: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+}
+.btn-add {
+    background-color: #0B4C8C;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    padding: 6px 12px;
+    width: 100%;
+    font-weight: 600;
+    font-size: 0.8rem;
+    transition: background 0.2s;
+}
+.btn-add:hover {
+    background-color: #083766;
+}
+
+/* Botones de Control de Cantidad (En el Carrito) */
+.btn-qty-control {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 6px;
+}
+.item-edit-qty {
+    width: 40px;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: bold;
+    border: none;
+    background: transparent;
+}

@@ -1,0 +1,21 @@
+body { background-color: #f4f5f8; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+.card-orden { transition: 0.3s; border-radius: 12px; border: 1px solid #e4e4eb; }
+.card-orden:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+.status-terminado { opacity: 0.7; filter: grayscale(50%); order: 999; }
+
+/* Timeline UI */
+.timeline { position: relative; padding: 20px 0; margin-top: 20px; }
+.timeline::before { content: ''; position: absolute; top: 0; left: 35px; height: 100%; width: 4px; background: #e9ecef; border-radius: 4px; }
+
+.timeline-item { position: relative; margin-bottom: 25px; padding-left: 80px; }
+.timeline-icon { position: absolute; left: 16px; top: 0; width: 42px; height: 42px; border-radius: 50%; background: #fff; border: 3px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; z-index: 1; transition: 0.3s; }
+.timeline-content { background: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
+.timeline-content:hover { border-color: #0B4C8C; }
+
+/* Colores de estados */
+.estado-0 .timeline-icon { border-color: #ccc; background: #f8f9fa; filter: grayscale(100%); } /* Pendiente */
+.estado-1 .timeline-icon { border-color: #FF7518; background: #fff3cd; } /* En Proceso */
+.estado-2 .timeline-icon { border-color: #198754; background: #d1e7dd; } /* Terminado (Verde) */
+.estado-2 .timeline-content { border-left: 5px solid #198754; }
+
+.img-preview { width: 100%; max-height: 150px; object-fit: cover; border-radius: 8px; margin-top: 10px; }

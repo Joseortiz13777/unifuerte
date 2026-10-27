@@ -1,0 +1,6 @@
+<?php require_once '../../conexion.php'; $patrones = $pdo->query("SELECT * FROM patron ORDER BY codigo_patron ASC")->fetchAll(PDO::FETCH_ASSOC); ?>
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Reporte Patrones</title><style>body{font-family:Arial,sans-serif;font-size:12px;padding:20px;}table{width:100%;border-collapse:collapse;margin-top:20px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#f4f5f8;font-weight:bold;}.header{text-align:center;border-bottom:2px solid #111;padding-bottom:10px;}</style></head>
+<body onload="window.print()"><div class="header"><h2>Librería de Patrones y Moldes - Unifuerte</h2><p>Generado: <?= date('d/m/Y h:i A') ?></p></div>
+<table><tr><th>ID</th><th>Cód. Patrón</th><th>Categoría</th><th>Descripción</th><th>Medidas</th><th>Talla</th></tr>
+<?php foreach($patrones as $p): ?><tr><td><?= $p['ID'] ?></td><td style="font-weight:bold;"><?= htmlspecialchars($p['codigo_patron'] ?? '') ?></td><td><?= htmlspecialchars($p['categoria'] ?? '') ?></td><td><?= htmlspecialchars($p['descripccion'] ?? '') ?></td><td><?= htmlspecialchars($p['medidas'] ?? '') ?></td><td style="color:red; font-weight:bold;"><?= htmlspecialchars($p['Talla'] ?? '') ?></td></tr><?php endforeach; ?>
+</table></body></html>

@@ -1,0 +1,113 @@
+/* =======================================================
+   ESTILOS ESPECÍFICOS PARA EL MÓDULO DE ADMINISTRACIÓN
+======================================================= */
+
+.btn-finanzas {
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    padding: 12px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: none;
+    width: 100%;
+}
+.btn-finanzas:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    color: white;
+}
+.btn-finanzas i { font-size: 1.5rem; margin-bottom: 5px; }
+
+.btn-ingreso { background-color: #5bb396; } 
+.btn-gasto { background-color: #c73e8a; } 
+.btn-transf { background-color: #4a8cdb; } 
+
+.card-finanzas {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #eef0f2;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+.card-finanzas-header {
+    background-color: transparent;
+    border-bottom: 1px solid #f8f9fa;
+    padding: 15px 20px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+}
+.card-finanzas-body {
+    padding: 20px;
+}
+
+.monto-positivo { color: #5bb396 !important; font-weight: bold; }
+.monto-negativo { color: #c73e8a !important; font-weight: bold; }
+.monto-neutro { color: #333 !important; font-weight: bold; }
+.monto-subtexto { font-size: 0.75rem; color: #999; }
+
+.month-selector {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.month-selector button {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    color: #555;
+}
+.month-selector h5 { margin: 0; font-weight: bold; color: #333; }
+
+.movimiento-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f1f1;
+}
+.movimiento-item:last-child { border-bottom: none; }
+.movimiento-icono {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    margin-right: 15px;
+}
+.mov-icon-ingreso { background: rgba(91, 179, 150, 0.1); color: #5bb396; }
+.mov-icon-gasto { background: rgba(199, 62, 138, 0.1); color: #c73e8a; }
+
+.btn-flotante-add {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #9b59b6; 
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+    border: none;
+    z-index: 1000;
+    transition: transform 0.2s;
+}
+.btn-flotante-add:hover { transform: scale(1.1); color: white; }
+
+.chart-container {
+    position: relative;
+    height: 250px;
+    width: 100%;
+}

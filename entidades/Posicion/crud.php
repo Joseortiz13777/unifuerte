@@ -1,0 +1,5 @@
+<?php require_once '../../conexion.php'; $accion = $_POST['accion'] ?? '';
+$campos = ['id_detalle_orden_compra', 'ubicacion', 'elemento', 'observacion'];
+if ($accion == 'crear') { $sql = "INSERT INTO posicion (" . implode(',', $campos) . ") VALUES (" . str_repeat('?,', count($campos)-1) . "?)"; $valores = array_map(function($c) { return ($_POST[$c] === '') ? null : $_POST[$c]; }, $campos); $pdo->prepare($sql)->execute($valores); echo json_encode(['status' => 'success']); exit; }
+if ($accion == 'editar') { $sql = "UPDATE posicion SET " . implode('=?,', $campos) . "=? WHERE ID=?"; $valores = array_map(function($c) { return ($_POST[$c] === '') ? null : $_POST[$c]; }, $campos); $valores[] = $_POST['id']; $pdo->prepare($sql)->execute($valores); echo json_encode(['status' => 'success']); exit; }
+if ($accion == 'eliminar') { $pdo->prepare("DELETE FROM posicion WHERE ID=?")->execute([$_POST['id']]); echo json_encode(['status' => 'success']); exit; } ?>

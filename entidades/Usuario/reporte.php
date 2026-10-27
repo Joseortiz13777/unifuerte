@@ -1,0 +1,6 @@
+<?php require_once '../../conexion.php'; $datos = $pdo->query("SELECT * FROM usuario ORDER BY nombre ASC")->fetchAll(PDO::FETCH_ASSOC); ?>
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Reporte Usuarios</title><style>body{font-family:Arial,sans-serif;font-size:12px;color:#111;}table{width:100%;border-collapse:collapse;margin-top:20px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#f4f5f8;}.header{text-align:center;border-bottom:2px solid #111;padding-bottom:10px;}</style></head>
+<body onload="window.print()"><div class="header"><h2>Directorio de Usuarios - Unifuerte</h2><p>Generado el: <?= date('d/m/Y h:i A') ?></p></div>
+<table><tr><th>ID</th><th>Usuario</th><th>Rol</th><th>Nombre</th><th>Apellido</th><th>Cédula</th><th>Teléfono</th><th>Profesión</th></tr>
+<?php foreach($datos as $d): ?><tr><td><?= $d['ID'] ?></td><td><?= $d['nombre_usuario'] ?></td><td><?= $d['rol'] ?></td><td><?= $d['nombre'] ?></td><td><?= $d['apellido'] ?></td><td><?= $d['cedula'] ?></td><td><?= $d['tlf'] ?></td><td><?= $d['profesion'] ?></td></tr><?php endforeach; ?>
+</table></body></html>

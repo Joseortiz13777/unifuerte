@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'Sugo Display';
+    src: url('../../../fons/SugoDisplay.otf') format('opentype'),
+         url('../../../fons/SugoDisplay.ttf') format('truetype');
+}
+
+body { background-color: #f8fafc; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
+
+/* Configuración de Sidebar similar al portal_ventas pero ambientado */
+.sidebar { top: 0; left: 0; height: 100vh; background: #064e3b; color: white; width: 260px; position: fixed; z-index: 1040; transition: transform 0.3s ease; display: flex; flex-direction: column; }
+.sidebar-logo { padding: 20px; flex-shrink: 0; }
+.sidebar-menu-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 20px; }
+.sidebar-footer { margin-top: auto; padding: 15px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #022c22; flex-shrink: 0; }
+
+.nav-link-custom { color: #d1fae5; padding: 12px 20px; display: block; text-decoration: none; font-weight: 500; transition: 0.2s; margin-bottom: 5px; cursor: pointer; }
+.nav-link-custom:hover { color: white; background: rgba(255,255,255,0.05); }
+.nav-link-custom.active { background: #047857; color: #ffffff; border-left: 4px solid #10b981; border-radius: 0 8px 8px 0; margin-right: 15px;}
+
+.main-content { margin-left: 260px; padding: 30px 40px; transition: margin 0.3s ease; background-color: #f8fafc; min-height: 100vh; padding-bottom: 80px;}
+.overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1030; }
+
+@media (max-width: 768px) { 
+    .sidebar { transform: translateX(-100%); } 
+    .sidebar.active { transform: translateX(0); } 
+    .main-content { margin-left: 0; padding: 15px; padding-bottom: 80px;} 
+    .overlay.active { display: block; } 
+    .mobile-header { display: flex !important; } 
+}
+
+.table-hover tbody tr:hover { background-color: #f1f5f9; cursor: pointer; }

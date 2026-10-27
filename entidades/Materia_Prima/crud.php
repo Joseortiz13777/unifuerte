@@ -1,0 +1,5 @@
+<?php require_once '../../conexion.php'; $accion = $_POST['accion'] ?? '';
+$campos = ['nombre', 'textura', 'color', 'codigo_color', 'tamano_dimension', 'origen_procedencia', 'unidad_medida', 'stock_actual', 'stock_minimo', 'composicion', 'costo', 'descripcion'];
+if ($accion == 'crear') { $sql = "INSERT INTO materia_prima (" . implode(',', $campos) . ") VALUES (" . str_repeat('?,', count($campos)-1) . "?)"; $valores = array_map(function($c) { return ($_POST[$c] === '') ? null : $_POST[$c]; }, $campos); $pdo->prepare($sql)->execute($valores); echo json_encode(['status' => 'success']); exit; }
+if ($accion == 'editar') { $sql = "UPDATE materia_prima SET " . implode('=?,', $campos) . "=? WHERE ID=?"; $valores = array_map(function($c) { return ($_POST[$c] === '') ? null : $_POST[$c]; }, $campos); $valores[] = $_POST['id']; $pdo->prepare($sql)->execute($valores); echo json_encode(['status' => 'success']); exit; }
+if ($accion == 'eliminar') { $pdo->prepare("DELETE FROM materia_prima WHERE ID=?")->execute([$_POST['id']]); echo json_encode(['status' => 'success']); exit; } ?>
